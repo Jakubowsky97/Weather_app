@@ -16,7 +16,7 @@ public class WeatherAppGUI extends JFrame {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        setSize(450, 650);
+        setSize(450, 750);
 
          setLocationRelativeTo(null);
 
@@ -40,11 +40,35 @@ public class WeatherAppGUI extends JFrame {
         add(weatherConditionImage);
 
         // Temperature text
-        JLabel temperatureText = new JLabel("10 C");
+        JLabel temperatureText = new JLabel("10 °C");
         temperatureText.setBounds(0, 350, 450, 54);
         temperatureText.setFont(new Font("Dialog", Font.BOLD, 48));
         temperatureText.setHorizontalAlignment(SwingConstants.CENTER);
         add(temperatureText);
+
+        // Min Temperature text
+        JLabel minTempText = new JLabel("Min");
+        minTempText.setBounds(60, 375, 450, 54);
+        minTempText.setFont(new Font("Dialog", Font.PLAIN, 24));
+        add(minTempText);
+
+        // Min Temperature text
+        JLabel minTempT = new JLabel("5 °C");
+        minTempT.setBounds(55, 405, 450, 54);
+        minTempT.setFont(new Font("Dialog", Font.BOLD, 24));
+        add(minTempT);
+
+        // Max Temperature text
+        JLabel maxTempText = new JLabel("Max");
+        maxTempText.setBounds(330, 375, 450, 54);
+        maxTempText.setFont(new Font("Dialog", Font.PLAIN, 24));
+        add(maxTempText);
+
+        // Max Temperature text
+        JLabel maxTempT = new JLabel("15 °C");
+        maxTempT.setBounds(325, 405, 450, 54);
+        maxTempT.setFont(new Font("Dialog", Font.BOLD, 24));
+        add(maxTempT);
 
         // Weather description text
         JLabel weatherConditionDesc = new JLabel("Cloudy");
@@ -74,6 +98,12 @@ public class WeatherAppGUI extends JFrame {
         windSpeedText.setBounds(310, 500, 90, 55);
         windSpeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
         add(windSpeedText);
+
+        // apparent temp text
+        JLabel apparentTempText = new JLabel("<html>Apparent temp <b>4 °C</b></html>");
+        apparentTempText.setBounds(175, 440, 110, 55);
+        apparentTempText.setFont(new Font("Dialog", Font.PLAIN, 16));
+        add(apparentTempText);
 
         // Submit Button with custom image
         JButton submitButton = new JButton(loadImage("src/assets/search.png"));
@@ -123,6 +153,16 @@ public class WeatherAppGUI extends JFrame {
 
                 double windspeed =  (double) weatherData.get("windspeed");
                 windSpeedText.setText("<html><b>Windspeed</b> " + windspeed + "km/h</html>");
+
+                double minTemp = (double) weatherData.get("temperature_min");
+                minTempT.setText("<html><b>"+ minTemp + " °C</b></html>");
+
+                double maxTemp = (double) weatherData.get("temperature_max");
+                maxTempT.setText("<html><b>"+ maxTemp + " °C</b></html>");
+
+                double apparentTemp = (double) weatherData.get("apparent_temp");
+                apparentTempText.setText("<html>Apparent temp <b>" + apparentTemp + " °C</b></html>");
+
             }
         });
         add(submitButton);

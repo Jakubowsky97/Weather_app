@@ -19,14 +19,15 @@ public class WeatherApp {
 
         Object locationObj = locationData.get(0);
 
-        if (locationObj instanceof JSONObject) {
-            JSONObject location = (JSONObject) locationObj;
+        if (locationObj instanceof JSONObject location) {
             double latitude = (double) location.get("latitude");
             double longitude = (double) location.get("longitude");
 
             String urlString = "https://api.open-meteo.com/v1/forecast?latitude=" +
-                    latitude + "&longitude=" + longitude +
-                    "&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m";
+                    latitude +
+                    "&longitude=" +
+                    longitude +
+                    "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=GMT";
 
             try{
                 HttpURLConnection conn = fetchApiResponse(urlString);
@@ -53,6 +54,7 @@ public class WeatherApp {
                 //System.out.println("JSON Response: " + resultsJsonObj.toString());
 
                 JSONObject hourly = (JSONObject) resultsJsonObj.get("hourly");
+                JSONObject daily = (JSONObject) resultsJsonObj.get("daily");
 
                 // finding index of current hour
                 JSONArray time = (JSONArray) hourly.get("time");
@@ -91,11 +93,27 @@ public class WeatherApp {
                 JSONArray windSpeedData = (JSONArray) hourly.get("wind_speed_10m");
                 double windSpeed = (double) windSpeedData.get(index);
 
+                // get apparent temp
+                JSONArray apparentTempData = (JSONArray) hourly.get("apparent_temperature");
+                double apparentTemp = (double) apparentTempData.get(index);
+
+                //get max temperature
+                JSONArray maxTempData = (JSONArray) daily.get("temperature_2m_max");
+                double maxTemp = (double) maxTempData.get(0);
+
+                //get min temperature
+                JSONArray minTempData = (JSONArray) daily.get("temperature_2m_min");
+                double minTemp = (double) minTempData.get(0);
+
+
                 JSONObject weatherData = new JSONObject();
                 weatherData.put("temperature", temperature);
                 weatherData.put("weather_condition", weatherCondition);
                 weatherData.put("humidity", humidity);
                 weatherData.put("windspeed", windSpeed);
+                weatherData.put("temperature_max", maxTemp);
+                weatherData.put("temperature_min", minTemp);
+                weatherData.put("apparent_temp", apparentTemp);
                 return weatherData;
             }catch(Exception e) {
                 e.printStackTrace();
